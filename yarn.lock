@@ -4597,13 +4597,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:0.1.12":
-  version: 0.1.12
-  resolution: "@types/chrome@npm:0.1.12"
+"@types/chrome@npm:0.1.24":
+  version: 0.1.24
+  resolution: "@types/chrome@npm:0.1.24"
   dependencies:
     "@types/filesystem": "npm:*"
     "@types/har-format": "npm:*"
-  checksum: 10c0/205828ff99a8aa65db4791c8ea483e4a5df434616881c895c9511d056f67a1b4fb6bd42b2aa58a2c59e9a8bd941d112a34597c1946ec885212774f0c2d7812d6
+  checksum: 10c0/6d79b98b206764c7c33faf8ddf49aaafe705671fdb5d339912471ee442c1eae2d9f483c9d30103a56e6c649081b268edca6171b3bc5f0cc20331f3d537244736
   languageName: node
   linkType: hard
 
@@ -10884,7 +10884,7 @@ __metadata:
     "@semantic-release/github": "npm:11.0.6"
     "@semantic-release/npm": "npm:12.0.2"
     "@semantic-release/release-notes-generator": "npm:14.1.0"
-    "@types/chrome": "npm:0.1.12"
+    "@types/chrome": "npm:0.1.24"
     "@types/node": "npm:^24.4.0"
     "@types/react": "npm:18.2.37"
     "@types/react-dom": "npm:18.2.15"
