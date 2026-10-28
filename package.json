@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tymzar/starter-web-extension"
+    "url": "git+https://github.com/tymzar/starter-web-extension.git"
   },
   "watch": {
     "dev": {
@@ -35,7 +35,9 @@
     "semantic-release": "semantic-release"
   },
   "type": "module",
-  "bin": "./bin/create-web-extension.js",
+  "bin": {
+    "starter-web-extension": "bin/create-web-extension.js"
+  },
   "files": [
     "bin/",
     "src/",
