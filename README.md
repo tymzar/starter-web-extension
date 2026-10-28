@@ -24,7 +24,7 @@ yarn create starter-web-extension
 
 ### Pre-requisites
 
-1. Use Node > **22.7.0** and Chrome **111+** (required by Tailwind CSS v4).
+1. Use Node >= **22.13.0** and Chrome **111+** (required by Tailwind CSS v4).
 2. Clone/Download this repository.
 3. Replace package's `name`, `description` and `repository` fields in `package.json`.
 4. Replace the name of extension in `src/manifest.json`.

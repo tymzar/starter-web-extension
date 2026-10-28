@@ -183,7 +183,7 @@ function createPackageJson(config: ProjectConfig, templatePath: string): any {
     description: config.description,
     license: config.license,
     engines: {
-      node: ">22.7.0",
+      node: ">=22.13.0",
     },
     ...(config.repository && {
       repository: {

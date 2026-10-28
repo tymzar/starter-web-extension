@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from "chart.js";
 
-type ApplicationRootProperties = {
+type AppRootProperties = {
   children: React.ReactNode;
 };
 
@@ -28,12 +28,10 @@ Chart.register(
   BarElement,
   Title,
   PointElement,
-  LineElement
+  LineElement,
 );
 
-export function PageRoot({
-  children,
-}: ApplicationRootProperties): React.JSX.Element {
+export function PageRoot({ children }: AppRootProperties): React.JSX.Element {
   return (
     <>
       <Toast.Provider />

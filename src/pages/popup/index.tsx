@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import { PageRoot } from "../../components/PageRoot/page-root";
+import { PageRoot } from "../../components/page-root/page-root";
 import { Popup } from "./popup";
 
 const container = document.querySelector("#root");
@@ -14,5 +14,5 @@ const root = createRoot(container);
 root.render(
   <PageRoot>
     <Popup />
-  </PageRoot>
+  </PageRoot>,
 );

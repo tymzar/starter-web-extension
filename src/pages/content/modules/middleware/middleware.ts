@@ -30,7 +30,7 @@ const initialState: MiddlewareState = {
  */
 function middlewareReducer(
   state: MiddlewareState,
-  action: MiddlewareActions
+  action: MiddlewareActions,
 ): MiddlewareState {
   switch (action.type) {
     case ACTION_TYPES.SET_LOADING: {
@@ -145,7 +145,7 @@ export function useMiddlewareReducer() {
         payload: { id, color, element },
       });
     },
-    []
+    [],
   );
 
   /**
@@ -181,10 +181,10 @@ export function useMiddlewareReducer() {
     (
       message: RequestMessage,
       sender: chrome.runtime.MessageSender,
-      sendResponse: (response: ContentMessageResponse) => void
+      sendResponse: (response: ContentMessageResponse) => void,
     ): void => {
       console.log(
-        `[content.js]. Message received ${message.type}, from ${sender.url}`
+        `[content.js]. Message received ${message.type}, from ${sender.url}`,
       );
 
       setLoading(true);
@@ -259,10 +259,10 @@ export function useMiddlewareReducer() {
 
           case MESSAGE_TYPES.CLEAR_BOXES: {
             const existingBoxes = document.querySelectorAll(
-              ".extension-color-box"
+              ".extension-color-box",
             );
 
-            // eslint-disable-next-line unicorn/no-array-for-each
+            // eslint-disable-next-line unicorn/no-for-each
             existingBoxes.forEach((box) => {
               try {
                 box.remove();
@@ -283,7 +283,7 @@ export function useMiddlewareReducer() {
 
           default: {
             throw new Error(
-              `Unknown message type: ${(message as DOMMessage).type}`
+              `Unknown message type: ${(message as DOMMessage).type}`,
             );
           }
         }
@@ -306,7 +306,7 @@ export function useMiddlewareReducer() {
         sendResponse(response);
       }
     },
-    [setLoading, setError, setSuccess, addColorBox, clearColorBoxes]
+    [setLoading, setError, setSuccess, addColorBox, clearColorBoxes],
   );
 
   return {

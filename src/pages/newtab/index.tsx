@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 
 import { NewTab } from "./new-tab";
-import { PageRoot } from "../../components/PageRoot/page-root";
+import { PageRoot } from "../../components/page-root/page-root";
 
 const container = document.querySelector("#root");
 
@@ -14,5 +14,5 @@ const root = createRoot(container);
 root.render(
   <PageRoot>
     <NewTab />
-  </PageRoot>
+  </PageRoot>,
 );

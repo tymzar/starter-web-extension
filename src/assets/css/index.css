@@ -25,7 +25,11 @@
   body {
     box-sizing: border-box;
     cursor: default;
-    font-family: Montserrat, DejaVu Sans, Verdana, sans‑serif;
+    font-family:
+      Montserrat,
+      DejaVu Sans,
+      Verdana,
+      sans‑serif;
     font-weight: 500;
   }
 
