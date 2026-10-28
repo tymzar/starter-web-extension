@@ -12,7 +12,7 @@ interface MiddlewareContextType {
 }
 
 const MiddlewareContext = createContext<MiddlewareContextType | undefined>(
-  undefined
+  undefined,
 );
 
 /**
@@ -37,11 +37,11 @@ export function MiddlewareProvider({
 
     if (isExtensionPage) {
       console.log(
-        "[MiddlewareProvider] Running in extension page, will send messages to active tab"
+        "[MiddlewareProvider] Running in extension page, will send messages to active tab",
       );
     } else {
       console.log(
-        "[MiddlewareProvider] Running in content script, listening for messages"
+        "[MiddlewareProvider] Running in content script, listening for messages",
       );
       chrome.runtime.onMessage.addListener(handleMessage);
 

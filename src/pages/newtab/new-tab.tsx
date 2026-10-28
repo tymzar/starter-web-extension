@@ -9,7 +9,7 @@ export function NewTab(): React.JSX.Element {
     if (searchQuery.trim()) {
       chrome.tabs.create({
         url: `https://www.google.com/search?q=${encodeURIComponent(
-          searchQuery
+          searchQuery,
         )}`,
       });
     }

@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 
 import { Options } from "./options";
-import { PageRoot } from "../../components/PageRoot/page-root";
+import { PageRoot } from "../../components/page-root/page-root";
 
 const container = document.querySelector("#root");
 
@@ -15,5 +15,5 @@ const root = createRoot(container);
 root.render(
   <PageRoot>
     <Options title="Settings" />
-  </PageRoot>
+  </PageRoot>,
 );

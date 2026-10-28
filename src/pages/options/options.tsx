@@ -34,13 +34,9 @@ function OptionsContent({ title }: OptionsProperties): React.JSX.Element {
       ["maxLength", "elements"],
       function (result) {
         console.log("Options: Storage result:", result);
-        if (result.maxLength) {
-          setMaxLength(result.maxLength);
-        } else {
-          setMaxLength("5");
-        }
+        setMaxLength(result.maxLength || "5");
         setCurrentElements(result.elements ?? []);
-      }
+      },
     );
 
     // Listen for storage changes
@@ -53,20 +49,22 @@ function OptionsContent({ title }: OptionsProperties): React.JSX.Element {
       if (changes.elements) {
         console.log("Options: Elements changed to:", changes.elements.newValue);
         setCurrentElements(
-          (changes.elements.newValue as StorageItems["elements"]) ?? []
+          (changes.elements.newValue as StorageItems["elements"]) ?? [],
         );
       }
 
       // Handle maxLength changes
-      if (changes.maxLength) {
-        console.log(
-          "Options: Max length changed to:",
-          changes.maxLength.newValue
-        );
-        setMaxLength(
-          (changes.maxLength.newValue as StorageItems["maxLength"]) ?? "5"
-        );
+      if (!changes.maxLength) {
+        return;
       }
+
+      console.log(
+        "Options: Max length changed to:",
+        changes.maxLength.newValue,
+      );
+      setMaxLength(
+        (changes.maxLength.newValue as StorageItems["maxLength"]) ?? "5",
+      );
     };
 
     chrome.storage.onChanged.addListener(handleStorageChange);
@@ -97,7 +95,7 @@ function OptionsContent({ title }: OptionsProperties): React.JSX.Element {
         function () {
           setCurrentElements(truncatedElements);
           notify();
-        }
+        },
       );
     } else {
       chrome.storage.sync.set(
@@ -106,7 +104,7 @@ function OptionsContent({ title }: OptionsProperties): React.JSX.Element {
         },
         function () {
           notify();
-        }
+        },
       );
     }
   };
@@ -124,7 +122,7 @@ function OptionsContent({ title }: OptionsProperties): React.JSX.Element {
         toast("Defaults Restored", {
           description: "Settings have been reset to default values.",
         });
-      }
+      },
     );
   };
 

@@ -30,13 +30,13 @@ function MiddlewareDemo(): React.JSX.Element {
             if (chrome.runtime.lastError) {
               console.error("Error sending colors:", chrome.runtime.lastError);
               actions.setError(
-                "Failed to send colors: " + chrome.runtime.lastError.message
+                "Failed to send colors: " + chrome.runtime.lastError.message,
               );
             } else if (response) {
               console.log("Colors sent successfully:", response);
               actions.setSuccess(response);
             }
-          }
+          },
         );
       } else {
         actions.setError("No active tab found");
@@ -57,13 +57,13 @@ function MiddlewareDemo(): React.JSX.Element {
             if (chrome.runtime.lastError) {
               console.error("Error getting body:", chrome.runtime.lastError);
               actions.setError(
-                "Failed to get body: " + chrome.runtime.lastError.message
+                "Failed to get body: " + chrome.runtime.lastError.message,
               );
             } else if (response) {
               console.log("Body retrieved successfully:", response);
               actions.setSuccess(response);
             }
-          }
+          },
         );
       } else {
         actions.setError("No active tab found");
@@ -84,13 +84,13 @@ function MiddlewareDemo(): React.JSX.Element {
             if (chrome.runtime.lastError) {
               console.error("Error clearing boxes:", chrome.runtime.lastError);
               actions.setError(
-                "Failed to clear boxes: " + chrome.runtime.lastError.message
+                "Failed to clear boxes: " + chrome.runtime.lastError.message,
               );
             } else if (response) {
               console.log("Boxes cleared successfully:", response);
               actions.setSuccess(response);
             }
-          }
+          },
         );
       } else {
         actions.setError("No active tab found");
@@ -181,7 +181,7 @@ function PopupContent(): React.JSX.Element {
 
         setElementsLimit(limit);
         setElements(storageElements);
-      }
+      },
     );
 
     // Listen for storage changes
@@ -199,16 +199,15 @@ function PopupContent(): React.JSX.Element {
       }
 
       // Handle maxLength changes
-      if (changes.maxLength) {
-        console.log(
-          "Popup: Max length changed to:",
-          changes.maxLength.newValue
-        );
-        const newLimit = Number(
-          (changes.maxLength.newValue as StorageItems["maxLength"]) ?? 1
-        );
-        setElementsLimit(newLimit);
+      if (!changes.maxLength) {
+        return;
       }
+
+      console.log("Popup: Max length changed to:", changes.maxLength.newValue);
+      const newLimit = Number(
+        (changes.maxLength.newValue as StorageItems["maxLength"]) ?? 1,
+      );
+      setElementsLimit(newLimit);
     };
 
     chrome.storage.onChanged.addListener(handleStorageChange);

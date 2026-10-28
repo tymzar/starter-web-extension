@@ -15,7 +15,7 @@ export function Panel(): React.JSX.Element {
       function (result) {
         setElementsLimit(Number(result.maxLength ?? 1));
         setElements(result.elements ?? []);
-      }
+      },
     );
 
     // Listen for storage changes
@@ -28,20 +28,19 @@ export function Panel(): React.JSX.Element {
       if (changes.elements) {
         console.log("Panel: Elements changed to:", changes.elements.newValue);
         setElements(
-          (changes.elements.newValue as StorageItems["elements"]) ?? []
+          (changes.elements.newValue as StorageItems["elements"]) ?? [],
         );
       }
 
       // Handle maxLength changes
-      if (changes.maxLength) {
-        console.log(
-          "Panel: Max length changed to:",
-          changes.maxLength.newValue
-        );
-        setElementsLimit(
-          Number((changes.maxLength.newValue as StorageItems["maxLength"]) ?? 1)
-        );
+      if (!changes.maxLength) {
+        return;
       }
+
+      console.log("Panel: Max length changed to:", changes.maxLength.newValue);
+      setElementsLimit(
+        Number((changes.maxLength.newValue as StorageItems["maxLength"]) ?? 1),
+      );
     };
 
     chrome.storage.onChanged.addListener(handleStorageChange);

@@ -112,41 +112,41 @@ async function createEsbuildContext(
   return esbuild.context(options);
 }
 
-function main() {
+async function main() {
   const isDevelopment = process.env.NODE_ENV !== "production";
 
   if (isDevelopment) {
-    createEsbuildContext(config).then((context) => {
-      context.watch().catch((error) => {
-        console.error(error);
-      });
+    console.log("Watching...");
 
-      context.rebuild().catch((error) => {
-        console.error(error);
-      });
-
-      context
-        .serve({
+    try {
+      const context = await createEsbuildContext(config);
+      // Run independently so one failure doesn't hide the others' errors
+      const results = await Promise.allSettled([
+        context.watch(),
+        context.rebuild(),
+        context.serve({
           servedir: "./build",
           port: process.env.PORT ? Number.parseInt(process.env.PORT) : 3000,
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    });
-    console.log("Watching...");
+        }),
+      ]);
+      for (const result of results) {
+        if (result.status === "rejected") {
+          console.error(result.reason);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   } else {
     console.log("Building extension...");
 
-    esbuild
-      .build(config)
-      .then(() => {
-        console.log("Building extension complete!");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await esbuild.build(config);
+      console.log("Building extension complete!");
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
-main();
+await main();

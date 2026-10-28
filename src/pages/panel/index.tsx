@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 
 import { Panel } from "./panel";
-import { PageRoot } from "../../components/PageRoot/page-root";
+import { PageRoot } from "../../components/page-root/page-root";
 
 const container = document.querySelector("#root");
 
@@ -14,5 +14,5 @@ const root = createRoot(container); // createRoot(container!) if you use TypeScr
 root.render(
   <PageRoot>
     <Panel />
-  </PageRoot>
+  </PageRoot>,
 );

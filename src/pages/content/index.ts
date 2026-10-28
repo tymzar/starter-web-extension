@@ -13,16 +13,16 @@ console.log("Content script works!");
 console.log("You need to reload extension to observe changes.");
 
 // Store references to color boxes for cleanup
-let colorBoxes: HTMLElement[] = [];
+const colorBoxes: HTMLElement[] = [];
 
 // Simple message handler without React dependencies
 function handleMessage(
   message: RequestMessage,
   sender: chrome.runtime.MessageSender,
-  sendResponse: (response: ContentMessageResponse) => void
+  sendResponse: (response: ContentMessageResponse) => void,
 ): void {
   console.log(
-    `[content.js]. Message received ${message.type}, from ${sender.url}`
+    `[content.js]. Message received ${message.type}, from ${sender.url}`,
   );
 
   let response: ContentMessageResponse = {
@@ -104,7 +104,7 @@ function handleMessage(
 
       default: {
         throw new Error(
-          `Unknown message type: ${(message as DOMMessage).type}`
+          `Unknown message type: ${(message as DOMMessage).type}`,
         );
       }
     }
@@ -128,7 +128,7 @@ function clearExistingBoxes(): void {
   // Remove boxes by class name
   const existingBoxes = document.querySelectorAll(".extension-color-box");
 
-  // eslint-disable-next-line unicorn/no-array-for-each
+  // eslint-disable-next-line unicorn/no-for-each
   existingBoxes.forEach((box) => {
     try {
       box.remove();
@@ -138,7 +138,7 @@ function clearExistingBoxes(): void {
   });
 
   // Clear the array
-  colorBoxes = [];
+  colorBoxes.length = 0;
 
   console.log("[content.js]. Cleared color boxes");
 }
