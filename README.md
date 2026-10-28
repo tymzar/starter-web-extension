@@ -10,7 +10,15 @@ npx starter-web-extension
 yarn create starter-web-extension
 ```
 
-## Tech stack
+## Upgrading from 1.x
+
+2.0.0 moves the template to a new major stack. Projects generated from 1.x are not changed automatically; to bring one up to date, compare it with a freshly generated project:
+
+- **React 18 → 19**, **HeroUI v2 → v3**: no `HeroUIProvider` (render `<Toast.Provider />` instead), compound components (`Card.Header`, `Card.Content`), `Divider` → `Separator`, `addToast` → `toast`, new button `variant` names.
+- **Tailwind CSS 3 → 4**: `tailwind.config.js` is gone; styles come from `@import "@heroui/styles"` in `src/assets/css/index.css` via `@tailwindcss/postcss`.
+- **Requirements**: Node **>= 22.13.0** and Chrome **111+** (`minimum_chrome_version` in the manifest).
+- **Tooling**: ESLint 10 (without `eslint-plugin-react`), Prettier 3, knip 6, esbuild 0.28.
+
 
 - React **19**
 - React `useReducer` (reducer-based state management)
