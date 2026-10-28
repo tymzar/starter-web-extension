@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { addToast } from "@heroui/react";
 import {
   Button,
   Card,
-  CardBody,
-  CardHeader,
-  Divider,
+  Description,
   Input,
+  Label,
+  Separator,
+  TextField,
+  toast,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import type { StorageItems } from "../content/modules/middleware/middleware.types";
 import { MiddlewareProvider } from "../content/modules/middleware";
 
 type OptionsProperties = {
@@ -16,28 +18,30 @@ type OptionsProperties = {
 };
 
 const notify = () => {
-  addToast({
-    title: "Settings Saved",
+  toast("Settings Saved", {
     description: "Your settings have been saved successfully!",
   });
 };
 
-function OptionsContent({ title }: OptionsProperties): JSX.Element {
+function OptionsContent({ title }: OptionsProperties): React.JSX.Element {
   const [maxLength, setMaxLength] = useState("5");
   const [currentElements, setCurrentElements] = useState<Array<string>>([]);
 
   useEffect(() => {
     console.log("Options: useEffect running, loading from storage...");
     // Load maxLength and current elements
-    chrome.storage.sync.get(["maxLength", "elements"], function (result) {
-      console.log("Options: Storage result:", result);
-      if (result.maxLength) {
-        setMaxLength(result.maxLength);
-      } else {
-        setMaxLength("5");
+    chrome.storage.sync.get<StorageItems>(
+      ["maxLength", "elements"],
+      function (result) {
+        console.log("Options: Storage result:", result);
+        if (result.maxLength) {
+          setMaxLength(result.maxLength);
+        } else {
+          setMaxLength("5");
+        }
+        setCurrentElements(result.elements ?? []);
       }
-      setCurrentElements(result.elements ?? []);
-    });
+    );
 
     // Listen for storage changes
     const handleStorageChange = (changes: {
@@ -48,7 +52,9 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
       // Handle elements changes
       if (changes.elements) {
         console.log("Options: Elements changed to:", changes.elements.newValue);
-        setCurrentElements(changes.elements.newValue ?? []);
+        setCurrentElements(
+          (changes.elements.newValue as StorageItems["elements"]) ?? []
+        );
       }
 
       // Handle maxLength changes
@@ -57,7 +63,9 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
           "Options: Max length changed to:",
           changes.maxLength.newValue
         );
-        setMaxLength(changes.maxLength.newValue?.toString() ?? "5");
+        setMaxLength(
+          (changes.maxLength.newValue as StorageItems["maxLength"]) ?? "5"
+        );
       }
     };
 
@@ -75,8 +83,7 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
 
     // Check if current elements exceed the new limit
     if (currentElements.length > newMaxLength) {
-      addToast({
-        title: "Warning",
+      toast("Warning", {
         description: `Current elements (${currentElements.length}) exceed the new limit (${newMaxLength}). Some elements will be removed.`,
       });
 
@@ -114,8 +121,7 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
       },
       function () {
         setCurrentElements([]);
-        addToast({
-          title: "Defaults Restored",
+        toast("Defaults Restored", {
           description: "Settings have been reset to default values.",
         });
       }
@@ -127,7 +133,7 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardBody className="flex flex-row items-center justify-between py-6 px-8">
+          <Card.Content className="flex flex-row items-center justify-between py-6 px-8">
             <div className="flex items-center gap-3">
               <Icon
                 icon="mdi:extension"
@@ -139,17 +145,16 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
             </div>
             <div className="flex flex-row gap-2">
               <Button
+                variant="outline"
                 onPress={() => {
                   chrome.tabs.create({ url: "chrome://newtab" });
                 }}
                 size="sm"
-                variant="bordered"
-                color="primary"
               >
                 Open New Tab
               </Button>
             </div>
-          </CardBody>
+          </Card.Content>
         </Card>
 
         <h1
@@ -161,78 +166,68 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
 
         {/* General Settings */}
         <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
+          <Card.Header>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
               General Settings
             </h2>
-          </CardHeader>
-          <Divider className="bg-gray-200 dark:bg-gray-700" />
-          <CardBody>
+          </Card.Header>
+          <Separator className="bg-gray-200 dark:bg-gray-700" />
+          <Card.Content>
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input
-                  label="Maximum Elements"
-                  placeholder="Enter max elements limit"
-                  value={maxLength}
-                  onChange={(error) => setMaxLength(error.target.value)}
-                  description={`Maximum number of elements the extension can store. Current: ${currentElements.length} elements`}
-                  type="number"
-                  min="1"
-                  max="100"
-                  classNames={{
-                    label: "text-gray-700 dark:text-gray-300",
-                    description: "text-gray-600 dark:text-gray-400",
-                    input:
-                      "text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600",
-                    inputWrapper:
-                      "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600",
-                  }}
-                />
+                <TextField value={maxLength} onChange={setMaxLength}>
+                  <Label className="text-gray-700 dark:text-gray-300">
+                    Maximum Elements
+                  </Label>
+                  <Input
+                    placeholder="Enter max elements limit"
+                    type="number"
+                    min="1"
+                    max="100"
+                    className="text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                  />
+                  <Description className="text-gray-600 dark:text-gray-400">
+                    {`Maximum number of elements the extension can store. Current: ${currentElements.length} elements`}
+                  </Description>
+                </TextField>
 
-                <Input
-                  label="Auto-save Interval"
-                  placeholder="5 minutes"
-                  description="How often to automatically save data"
-                  classNames={{
-                    label: "text-gray-700 dark:text-gray-300",
-                    description: "text-gray-600 dark:text-gray-400",
-                    input:
-                      "text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600",
-                    inputWrapper:
-                      "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600",
-                  }}
-                />
+                <TextField>
+                  <Label className="text-gray-700 dark:text-gray-300">
+                    Auto-save Interval
+                  </Label>
+                  <Input
+                    placeholder="5 minutes"
+                    className="text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                  />
+                  <Description className="text-gray-600 dark:text-gray-400">
+                    How often to automatically save data
+                  </Description>
+                </TextField>
               </div>
 
               <div className="flex gap-2 pt-4">
-                <Button
-                  color="primary"
-                  onPress={handleSave}
-                  startContent={<Icon icon="mdi:content-save" />}
-                >
+                <Button variant="primary" onPress={handleSave}>
+                  <Icon icon="mdi:content-save" />
                   Save Settings
                 </Button>
-                <Button
-                  variant="flat"
-                  onPress={resetToDefaults}
-                  startContent={<Icon icon="mdi:refresh" />}
-                >
+                <Button variant="tertiary" onPress={resetToDefaults}>
+                  <Icon icon="mdi:refresh" />
                   Reset to Defaults
                 </Button>
               </div>
             </div>
-          </CardBody>
+          </Card.Content>
         </Card>
 
         {/* Extension Information */}
         <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
+          <Card.Header>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
               Extension Information
             </h2>
-          </CardHeader>
-          <Divider className="bg-gray-200 dark:bg-gray-700" />
-          <CardBody>
+          </Card.Header>
+          <Separator className="bg-gray-200 dark:bg-gray-700" />
+          <Card.Content>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                 <Icon
@@ -273,28 +268,28 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
                 </p>
               </div>
             </div>
-          </CardBody>
+          </Card.Content>
         </Card>
 
         {/* Quick Actions */}
         <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
+          <Card.Header>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
               Quick Actions
             </h2>
-          </CardHeader>
-          <Divider className="bg-gray-200 dark:bg-gray-700" />
-          <CardBody>
+          </Card.Header>
+          <Separator className="bg-gray-200 dark:bg-gray-700" />
+          <Card.Content>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Button
-                color="primary"
-                variant="flat"
+                variant="secondary"
+                fullWidth
                 className="h-16 text-left justify-start bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                 onPress={() => {
                   chrome.tabs.create({ url: "chrome://extensions" });
                 }}
-                startContent={<Icon icon="mdi:puzzle" className="text-2xl" />}
               >
+                <Icon icon="mdi:puzzle" className="text-2xl" />
                 <div className="text-left">
                   <div className="font-semibold text-gray-800 dark:text-white">
                     Extensions Settings
@@ -306,16 +301,16 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
               </Button>
 
               <Button
-                color="secondary"
-                variant="flat"
+                variant="tertiary"
+                fullWidth
                 className="h-16 text-left justify-start bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                 onPress={() => {
                   chrome.tabs.create({
                     url: "https://github.com/tymzar/web-extension",
                   });
                 }}
-                startContent={<Icon icon="mdi:github" className="text-2xl" />}
               >
+                <Icon icon="mdi:github" className="text-2xl" />
                 <div className="text-left">
                   <div className="font-semibold text-gray-800 dark:text-white">
                     GitHub Repository
@@ -326,14 +321,14 @@ function OptionsContent({ title }: OptionsProperties): JSX.Element {
                 </div>
               </Button>
             </div>
-          </CardBody>
+          </Card.Content>
         </Card>
       </div>
     </div>
   );
 }
 
-export function Options({ title }: OptionsProperties): JSX.Element {
+export function Options({ title }: OptionsProperties): React.JSX.Element {
   return (
     <MiddlewareProvider>
       <OptionsContent title={title} />

@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { MESSAGE_TYPES } from "../content/modules/middleware/middleware.types";
+import {
+  MESSAGE_TYPES,
+  type StorageItems,
+} from "../content/modules/middleware/middleware.types";
 import {
   MiddlewareProvider,
   useMiddleware,
 } from "../content/modules/middleware";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Chip,
-} from "@heroui/react";
+import { Button, Card, Chip, Separator } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 // Component that demonstrates middleware usage
-function MiddlewareDemo(): JSX.Element {
+function MiddlewareDemo(): React.JSX.Element {
   const { state, actions } = useMiddleware();
 
   const handleSendColors = () => {
@@ -104,7 +100,7 @@ function MiddlewareDemo(): JSX.Element {
 
   return (
     <Card className="my-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-      <CardHeader>
+      <Card.Header>
         <div className="flex flex-col justify-center gap-2">
           <div className="flex items-center gap-2">
             <Icon
@@ -120,9 +116,9 @@ function MiddlewareDemo(): JSX.Element {
             Open a web page first, then try the buttons
           </div>
         </div>
-      </CardHeader>
-      <Divider className="bg-blue-200 dark:bg-blue-700" />
-      <CardBody>
+      </Card.Header>
+      <Separator className="bg-blue-200 dark:bg-blue-700" />
+      <Card.Content>
         <div className="space-y-3">
           <div className="text-sm text-gray-600 dark:text-gray-400">
             <strong>State:</strong> Loading: {state.isLoading ? "Yes" : "No"} |
@@ -136,29 +132,14 @@ function MiddlewareDemo(): JSX.Element {
             </div>
           )}
 
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              color="primary"
-              variant="flat"
-              onPress={handleSendColors}
-            >
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" size="sm" onPress={handleSendColors}>
               Send Colors
             </Button>
-            <Button
-              size="sm"
-              color="secondary"
-              variant="flat"
-              onPress={handleGetBody}
-            >
+            <Button variant="tertiary" size="sm" onPress={handleGetBody}>
               Get Body
             </Button>
-            <Button
-              size="sm"
-              color="danger"
-              variant="flat"
-              onPress={handleClearBoxes}
-            >
+            <Button variant="danger-soft" size="sm" onPress={handleClearBoxes}>
               Clear Boxes
             </Button>
           </div>
@@ -182,23 +163,26 @@ function MiddlewareDemo(): JSX.Element {
             </div>
           )}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
 
-function PopupContent(): JSX.Element {
+function PopupContent(): React.JSX.Element {
   const [elementsLimit, setElementsLimit] = useState(1);
   const [elements, setElements] = useState<Array<string>>([]);
 
   useEffect(() => {
-    chrome.storage.sync.get(["maxLength", "elements"], function (result) {
-      const limit = result.maxLength ?? 1;
-      const storageElements = result.elements ?? [];
+    chrome.storage.sync.get<StorageItems>(
+      ["maxLength", "elements"],
+      function (result) {
+        const limit = Number(result.maxLength ?? 1);
+        const storageElements = result.elements ?? [];
 
-      setElementsLimit(limit);
-      setElements(storageElements);
-    });
+        setElementsLimit(limit);
+        setElements(storageElements);
+      }
+    );
 
     // Listen for storage changes
     const handleStorageChange = (changes: {
@@ -209,7 +193,8 @@ function PopupContent(): JSX.Element {
       // Handle elements changes
       if (changes.elements) {
         console.log("Popup: Elements changed to:", changes.elements.newValue);
-        const newElements = changes.elements.newValue ?? [];
+        const newElements =
+          (changes.elements.newValue as StorageItems["elements"]) ?? [];
         setElements(newElements);
       }
 
@@ -219,7 +204,9 @@ function PopupContent(): JSX.Element {
           "Popup: Max length changed to:",
           changes.maxLength.newValue
         );
-        const newLimit = changes.maxLength.newValue ?? 1;
+        const newLimit = Number(
+          (changes.maxLength.newValue as StorageItems["maxLength"]) ?? 1
+        );
         setElementsLimit(newLimit);
       }
     };
@@ -258,7 +245,7 @@ function PopupContent(): JSX.Element {
   return (
     <div className="h-full p-4">
       <Card className="w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-        <CardHeader className="flex justify-between items-center">
+        <Card.Header className="flex flex-row justify-between items-center">
           <div className="flex items-center gap-2">
             <Icon
               icon="mdi:extension"
@@ -272,9 +259,8 @@ function PopupContent(): JSX.Element {
             </h3>
           </div>
           <Button
+            variant="ghost"
             isIconOnly
-            color="primary"
-            variant="light"
             aria-label="Settings"
             onPress={() => {
               chrome.runtime.openOptionsPage();
@@ -282,11 +268,11 @@ function PopupContent(): JSX.Element {
           >
             <Icon icon="mdi:cog" className="text-lg" />
           </Button>
-        </CardHeader>
+        </Card.Header>
 
-        <Divider className="bg-gray-200 dark:bg-gray-700" />
+        <Separator className="bg-gray-200 dark:bg-gray-700" />
 
-        <CardBody>
+        <Card.Content>
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
               <Icon
@@ -323,7 +309,7 @@ function PopupContent(): JSX.Element {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {elements.map((element, index) => (
-                    <Chip key={index} variant="flat" color="primary" size="sm">
+                    <Chip key={index} variant="soft" color="accent" size="sm">
                       {element}
                     </Chip>
                   ))}
@@ -333,36 +319,30 @@ function PopupContent(): JSX.Element {
 
             <div className="flex gap-2">
               <Button
-                color="primary"
-                variant="flat"
+                variant="secondary"
                 className="flex-1"
-                startContent={<Icon icon="mdi:plus" />}
                 onPress={addElement}
                 isDisabled={elements.length >= elementsLimit}
               >
+                <Icon icon="mdi:plus" />
                 Add Element
               </Button>
               {elements.length > 0 && (
-                <Button
-                  color="danger"
-                  variant="flat"
-                  size="sm"
-                  startContent={<Icon icon="mdi:delete" />}
-                  onPress={clearElements}
-                >
+                <Button variant="danger-soft" size="sm" onPress={clearElements}>
+                  <Icon icon="mdi:delete" />
                   Clear
                 </Button>
               )}
             </div>
           </div>
-        </CardBody>
+        </Card.Content>
       </Card>
       <MiddlewareDemo />
     </div>
   );
 }
 
-export function Popup(): JSX.Element {
+export function Popup(): React.JSX.Element {
   return (
     <MiddlewareProvider>
       <PopupContent />

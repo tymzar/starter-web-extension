@@ -5,8 +5,7 @@ import { htmlPlugin } from "@craftamap/esbuild-plugin-html";
 import postCssPlugin from "esbuild-style-plugin";
 import { copy } from "esbuild-plugin-copy";
 import * as esbuild from "esbuild";
-import tailwindcss from "tailwindcss";
-import autoprefixer from "autoprefixer";
+import tailwindcss from "@tailwindcss/postcss";
 
 import type { BuildContext, BuildOptions } from "esbuild";
 
@@ -50,7 +49,7 @@ const config: BuildOptions = {
     }),
     postCssPlugin({
       postcss: {
-        plugins: [tailwindcss, autoprefixer],
+        plugins: [tailwindcss()],
       },
     }),
     htmlPlugin({

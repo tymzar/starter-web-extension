@@ -1,5 +1,11 @@
 import { input, select, confirm } from "@inquirer/prompts";
-import { writeFileSync, mkdirSync, cpSync, existsSync } from "fs";
+import {
+  writeFileSync,
+  mkdirSync,
+  cpSync,
+  existsSync,
+  readFileSync,
+} from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -109,7 +115,6 @@ async function createProject(config: ProjectConfig): Promise<void> {
     "knip.config.ts",
     "playwright.config.ts",
     "postcss.config.mjs",
-    "tailwind.config.js",
     "tsconfig.json",
     "Dockerfile",
     "docker-compose.yml",
@@ -127,7 +132,7 @@ async function createProject(config: ProjectConfig): Promise<void> {
   }
 
   // Create custom package.json
-  const packageJson = createPackageJson(config);
+  const packageJson = createPackageJson(config, templatePath);
 
   // Write package.json
   writeFileSync(
@@ -147,7 +152,31 @@ async function createProject(config: ProjectConfig): Promise<void> {
   console.log(`\n🎉 Happy coding!`);
 }
 
-function createPackageJson(config: ProjectConfig): any {
+// Packages only the template itself needs (publishing the CLI, releases)
+function isTemplateOnlyDependency(name: string): boolean {
+  return name === "@inquirer/prompts" || name.includes("semantic-release");
+}
+
+// Read versions from the template's package.json so generated projects
+// always match the template they were copied from
+function templateDependencies(
+  templatePath: string
+): Record<"dependencies" | "devDependencies", Record<string, string>> {
+  const template = JSON.parse(
+    readFileSync(join(templatePath, "package.json"), "utf8")
+  );
+  const pick = (deps: Record<string, string>) =>
+    Object.fromEntries(
+      Object.entries(deps).filter(([name]) => !isTemplateOnlyDependency(name))
+    );
+
+  return {
+    dependencies: pick(template.dependencies),
+    devDependencies: pick(template.devDependencies),
+  };
+}
+
+function createPackageJson(config: ProjectConfig, templatePath: string): any {
   return {
     name: config.name,
     version: "1.0.0",
@@ -184,39 +213,7 @@ function createPackageJson(config: ProjectConfig): any {
       knip: "knip",
     },
     type: "module",
-    dependencies: {
-      "@heroui/react": "^2.8.2",
-      "@iconify/react": "^6.0.0",
-      "chart.js": "4.4.0",
-      "framer-motion": "^12.23.12",
-      react: "18.2.0",
-      "react-dom": "18.2.0",
-    },
-    devDependencies: {
-      "@craftamap/esbuild-plugin-html": "0.6.1",
-      "@playwright/test": "^1.55.0",
-      "@types/chrome": "^0.1.11",
-      "@types/node": "^24.4.0",
-      "@types/react": "18.2.37",
-      "@types/react-dom": "18.2.15",
-      "@typescript-eslint/eslint-plugin": "^8.0.0",
-      "@typescript-eslint/parser": "^8.0.0",
-      autoprefixer: "10.4.16",
-      "dotenv-cli": "7.2.1",
-      esbuild: "0.18.0",
-      "esbuild-plugin-clean": "1.0.1",
-      "esbuild-plugin-copy": "2.1.1",
-      "esbuild-style-plugin": "1.6.3",
-      eslint: "9.35.0",
-      "eslint-plugin-react": "^7.37.2",
-      "eslint-plugin-react-hooks": "^5.0.0",
-      "eslint-plugin-unicorn": "^61.0.2",
-      knip: "^5.63.1",
-      postcss: "^8.5.6",
-      prettier: "2.8.3",
-      tailwindcss: "^3.4.0",
-      typescript: "^5.9.2",
-    },
+    ...templateDependencies(templatePath),
     packageManager:
       "yarn@4.9.3+sha512.8295ee814f6b253e16f516416481b481a215ed03ef1ae38524d108084872560a9ed75aeb23b91ab64222062ac4149a594150ae538c2a9536fdbcefd4e49b11cc",
   };

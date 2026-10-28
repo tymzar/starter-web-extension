@@ -1,8 +1,8 @@
-import { Button, Card, CardBody, CardHeader, Input } from "@heroui/react";
+import { Button, Card, InputGroup } from "@heroui/react";
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 
-export function NewTab(): JSX.Element {
+export function NewTab(): React.JSX.Element {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
@@ -39,55 +39,55 @@ export function NewTab(): JSX.Element {
 
         {/* Search Section */}
         <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
+          <Card.Header>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
               Search
             </h2>
-          </CardHeader>
-          <CardBody>
+          </Card.Header>
+          <Card.Content>
             <div className="flex gap-2">
-              <Input
-                placeholder="Search the web..."
-                value={searchQuery}
-                onChange={(error) => setSearchQuery(error.target.value)}
-                onKeyDown={(error) => error.key === "Enter" && handleSearch()}
-                startContent={
+              <InputGroup fullWidth>
+                <InputGroup.Prefix>
                   <Icon
                     icon="mdi:web"
                     width={20}
                     className="text-gray-400 dark:text-gray-500"
                   />
-                }
-              />
-              <Button
-                color="primary"
-                onPress={handleSearch}
-                startContent={<Icon icon="mdi:magnify" width={20} />}
-              >
+                </InputGroup.Prefix>
+                <InputGroup.Input
+                  aria-label="Search the web"
+                  placeholder="Search the web..."
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onKeyDown={(event) => event.key === "Enter" && handleSearch()}
+                />
+              </InputGroup>
+              <Button variant="primary" onPress={handleSearch}>
+                <Icon icon="mdi:magnify" width={20} />
                 Search
               </Button>
             </div>
-          </CardBody>
+          </Card.Content>
         </Card>
 
         {/* Quick Actions */}
         <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader>
+          <Card.Header>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
               Actions
             </h2>
-          </CardHeader>
-          <CardBody>
+          </Card.Header>
+          <Card.Content>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Button
-                color="primary"
-                variant="flat"
+                variant="secondary"
+                fullWidth
                 className="h-16 text-left justify-start bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                 onPress={() => {
                   chrome.tabs.create({ url: "chrome://extensions" });
                 }}
-                startContent={<Icon icon="mdi:puzzle" className="text-2xl" />}
               >
+                <Icon icon="mdi:puzzle" className="text-2xl" />
                 <div className="text-left">
                   <div className="font-semibold text-gray-800 dark:text-white">
                     Extensions Settings
@@ -99,14 +99,14 @@ export function NewTab(): JSX.Element {
               </Button>
 
               <Button
-                color="secondary"
-                variant="flat"
+                variant="tertiary"
+                fullWidth
                 className="h-16 text-left justify-start bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                 onPress={() => {
                   chrome.runtime.openOptionsPage();
                 }}
-                startContent={<Icon icon="mdi:cog" className="text-2xl" />}
               >
+                <Icon icon="mdi:cog" className="text-2xl" />
                 <div className="text-left">
                   <div className="font-semibold text-gray-800 dark:text-white">
                     Extension Options
@@ -117,13 +117,13 @@ export function NewTab(): JSX.Element {
                 </div>
               </Button>
             </div>
-          </CardBody>
+          </Card.Content>
         </Card>
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-            <CardBody className="text-center p-6">
+            <Card.Content className="text-center p-6">
               <Icon
                 icon="mdi:shield-check"
                 className="text-3xl text-green-600 dark:text-green-400 mx-auto mb-3"
@@ -134,11 +134,11 @@ export function NewTab(): JSX.Element {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Built with security in mind
               </p>
-            </CardBody>
+            </Card.Content>
           </Card>
 
           <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-            <CardBody className="text-center p-6">
+            <Card.Content className="text-center p-6">
               <Icon
                 icon="mdi:rocket-launch"
                 className="text-3xl text-blue-600 dark:text-blue-400 mx-auto mb-3"
@@ -149,11 +149,11 @@ export function NewTab(): JSX.Element {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Optimized for performance
               </p>
-            </CardBody>
+            </Card.Content>
           </Card>
 
           <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-            <CardBody className="text-center p-6">
+            <Card.Content className="text-center p-6">
               <Icon
                 icon="mdi:palette"
                 className="text-3xl text-purple-600 dark:text-purple-400 mx-auto mb-3"
@@ -164,7 +164,7 @@ export function NewTab(): JSX.Element {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Modern and clean design
               </p>
-            </CardBody>
+            </Card.Content>
           </Card>
         </div>
       </div>

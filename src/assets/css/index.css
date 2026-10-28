@@ -1,34 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "@heroui/styles";
 
-#app,
-#root,
-body,
-html {
-  height: 100%;
-  margin: 0;
-}
-html {
-  -webkit-text-size-adjust: 100%;
-  padding: 0;
-  font-size: 16px;
-  line-height: 24px;
-  background: #fff;
-  color: #26221e;
-  font-weight: 500;
-}
+/* Keep v2 behaviour: dark mode is opt-in via a `.dark` class, not the OS setting */
+@custom-variant dark (&:where(.dark, .dark *));
 
-body {
-  box-sizing: border-box;
-  cursor: default;
-  font-family: Montserrat, DejaVu Sans, Verdana, sans‑serif;
-  font-weight: 500;
-}
+/* Layered so Tailwind utilities can still override these */
+@layer base {
+  #app,
+  #root,
+  body,
+  html {
+    height: 100%;
+    margin: 0;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    padding: 0;
+    font-size: 16px;
+    line-height: 24px;
+    background: #fff;
+    color: #26221e;
+    font-weight: 500;
+  }
 
-*,
-:after,
-:before {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+  body {
+    box-sizing: border-box;
+    cursor: default;
+    font-family: Montserrat, DejaVu Sans, Verdana, sans‑serif;
+    font-weight: 500;
+  }
+
+  *,
+  :after,
+  :before {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
 }
