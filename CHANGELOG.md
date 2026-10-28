@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/tymzar/starter-web-extension/compare/v1.0.1...v1.1.0) (2026-10-28)
+
+
+### Features
+
+* migrate to React 19, HeroUI v3 and Tailwind CSS v4 ([15d8d51](https://github.com/tymzar/starter-web-extension/commit/15d8d5141bdc4d49ea803d5f8f65cf06a1886d47)), closes [#28](https://github.com/tymzar/starter-web-extension/issues/28) [#47](https://github.com/tymzar/starter-web-extension/issues/47) [#53](https://github.com/tymzar/starter-web-extension/issues/53) [#57](https://github.com/tymzar/starter-web-extension/issues/57) [#59](https://github.com/tymzar/starter-web-extension/issues/59) [#62](https://github.com/tymzar/starter-web-extension/issues/62) [#63](https://github.com/tymzar/starter-web-extension/issues/63) [#65](https://github.com/tymzar/starter-web-extension/issues/65) [#66](https://github.com/tymzar/starter-web-extension/issues/66) [#67](https://github.com/tymzar/starter-web-extension/issues/67)
+
 ## [1.0.1](https://github.com/tymzar/starter-web-extension/compare/v1.0.0...v1.0.1) (2025-09-25)
 
 
