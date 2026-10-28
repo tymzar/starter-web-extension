@@ -96,7 +96,7 @@
     "eslint-plugin-unicorn": "61.0.2",
     "knip": "5.88.1",
     "postcss": "8.5.32",
-    "prettier": "2.8.3",
+    "prettier": "3.9.10",
     "semantic-release": "25.0.9",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.2"

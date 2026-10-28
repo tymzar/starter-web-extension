@@ -7881,12 +7881,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.8.3":
-  version: 2.8.3
-  resolution: "prettier@npm:2.8.3"
+"prettier@npm:3.9.10":
+  version: 3.9.10
+  resolution: "prettier@npm:3.9.10"
   bin:
-    prettier: bin-prettier.js
-  checksum: 10c0/373fda1908c8f7f06e6b9966986f35784152d4f10c907c7153062fe36542358d696433450f3efb356b7438c855a8d8b4133c3e486057dc63117d94596ff3f5f1
+    prettier: bin/prettier.cjs
+  checksum: 10c0/0b3531593aa6fb36ac6baf629cb058bda472c59a6938774f931fe55283a07c62e6f56e621b043a82d8a3e21fc284c08c34f9e539fc70072635f79b7bae1a1067
   languageName: node
   linkType: hard
 
@@ -8845,7 +8845,7 @@ __metadata:
     eslint-plugin-unicorn: "npm:61.0.2"
     knip: "npm:5.88.1"
     postcss: "npm:8.5.32"
-    prettier: "npm:2.8.3"
+    prettier: "npm:3.9.10"
     react: "npm:19.3.1"
     react-aria: "npm:3.53.1"
     react-aria-components: "npm:1.22.1"
