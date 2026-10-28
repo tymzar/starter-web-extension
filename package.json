@@ -1,6 +1,6 @@
 {
   "name": "starter-web-extension",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A web extension boilerplate with React 19, HeroUI v3, Tailwind CSS v4, and esbuild",
   "license": "MIT",
   "engines": {

@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/tymzar/starter-web-extension/compare/v2.0.0...v2.0.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* **cli:** generate projects that build and check correctly ([2d26a3e](https://github.com/tymzar/starter-web-extension/commit/2d26a3ed88fff1e4c6d0b041d1a10d6d7d096c3b))
+
 # [2.0.0](https://github.com/tymzar/starter-web-extension/compare/v1.1.0...v2.0.0) (2026-10-28)
 
 
