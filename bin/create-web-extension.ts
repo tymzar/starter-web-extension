@@ -119,6 +119,8 @@ async function createProject(config: ProjectConfig): Promise<void> {
     "Dockerfile",
     "docker-compose.yml",
     ".gitignore",
+    // nodeLinker: node-modules; Yarn's default PnP mode breaks the build
+    ".yarnrc.yml",
   ];
 
   console.log("📋 Copying template files...");
@@ -157,22 +159,36 @@ function isTemplateOnlyDependency(name: string): boolean {
   return name === "@inquirer/prompts" || name.includes("semantic-release");
 }
 
-// Read versions from the template's package.json so generated projects
-// always match the template they were copied from
-function templateDependencies(
+// Scripts only the template itself needs (building the CLI, releases)
+const TEMPLATE_ONLY_SCRIPTS = new Set([
+  "build:binary",
+  "prepublishOnly",
+  "semantic-release",
+]);
+
+// Read scripts and versions from the template's package.json so generated
+// projects always match the template they were copied from
+function templateFields(
   templatePath: string
-): Record<"dependencies" | "devDependencies", Record<string, string>> {
+): Record<
+  "scripts" | "dependencies" | "devDependencies",
+  Record<string, string>
+> {
   const template = JSON.parse(
     readFileSync(join(templatePath, "package.json"), "utf8")
   );
-  const pick = (deps: Record<string, string>) =>
+  const pick = (
+    entries: Record<string, string>,
+    isTemplateOnly: (name: string) => boolean
+  ) =>
     Object.fromEntries(
-      Object.entries(deps).filter(([name]) => !isTemplateOnlyDependency(name))
+      Object.entries(entries).filter(([name]) => !isTemplateOnly(name))
     );
 
   return {
-    dependencies: pick(template.dependencies),
-    devDependencies: pick(template.devDependencies),
+    scripts: pick(template.scripts, (name) => TEMPLATE_ONLY_SCRIPTS.has(name)),
+    dependencies: pick(template.dependencies, isTemplateOnlyDependency),
+    devDependencies: pick(template.devDependencies, isTemplateOnlyDependency),
   };
 }
 
@@ -197,23 +213,8 @@ function createPackageJson(config: ProjectConfig, templatePath: string): any {
         extensions: "ts,tsx,html",
       },
     },
-    scripts: {
-      start: "dotenv -e .env.local node scripts/esbuild.config.ts",
-      build: "dotenv -e .env node scripts/esbuild.config.ts",
-      lint: "eslint --cache --no-error-on-unmatched-pattern --ext ts,tsx {src,scripts}",
-      "lint:fix": "yarn lint --fix",
-      format: "prettier --no-editorconfig src/**/*.* --check",
-      "format:fix": "prettier --no-editorconfig src/**/*.* --write",
-      "test:e2e": "playwright test",
-      "test:docker": "docker compose up playwright-tests --build",
-      "test:docker:update-snapshots":
-        "docker compose run --rm playwright-tests yarn test:e2e --update-snapshots",
-      "prettier:fix":
-        "prettier --no-editorconfig src/'**/*.{ts,tsx,js,css,html,md}' --write",
-      knip: "knip",
-    },
     type: "module",
-    ...templateDependencies(templatePath),
+    ...templateFields(templatePath),
     packageManager:
       "yarn@4.9.3+sha512.8295ee814f6b253e16f516416481b481a215ed03ef1ae38524d108084872560a9ed75aeb23b91ab64222062ac4149a594150ae538c2a9536fdbcefd4e49b11cc",
   };
