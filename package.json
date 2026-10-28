@@ -35,9 +35,7 @@
     "semantic-release": "semantic-release"
   },
   "type": "module",
-  "bin": {
-    "starter-web-extension": "bin/create-web-extension.js"
-  },
+  "bin": "bin/create-web-extension.js",
   "files": [
     "bin/",
     "src/",
