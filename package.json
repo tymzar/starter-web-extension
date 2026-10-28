@@ -28,7 +28,7 @@
     "format": "prettier --no-editorconfig src/**/*.* --check",
     "format:fix": "prettier --no-editorconfig src/**/*.* --write",
     "test:e2e": "playwright test",
-    "test:docker": "docker compose up playwright-tests --build",
+    "test:docker": "docker compose up playwright-tests --build --exit-code-from playwright-tests",
     "test:docker:update-snapshots": "docker compose run --rm playwright-tests yarn test:e2e --update-snapshots",
     "prettier:fix": "prettier --no-editorconfig src/'**/*.{ts,tsx,js,css,html,md}' --write",
     "knip": "knip",
