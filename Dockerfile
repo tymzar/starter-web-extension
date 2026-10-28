@@ -1,5 +1,5 @@
 # Use the official Playwright image with Node.js
-FROM mcr.microsoft.com/playwright:v1.40.0-focal
+FROM mcr.microsoft.com/playwright:v1.55.1-noble
 
 # Set working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ RUN corepack enable
 COPY package.json yarn.lock ./
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 # Verify installation
 RUN yarn --version && node --version
@@ -20,7 +20,7 @@ RUN yarn --version && node --version
 COPY . .
 
 # Reinstall dependencies after copying all files
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 # Set environment variables for build
 ENV NODE_ENV=production

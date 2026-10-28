@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
@@ -21,22 +21,22 @@ jobs:
           cache: true
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
-          node-version: 22.19.0
+          node-version: 22.23.4
           cache: "yarn"
 
       - name: Install all dependencies
         run: yarn --immutable-cache
 
       - name: Cache node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
 
       - name: Upload node_modules
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: node-modules
           path: node_modules/
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
@@ -59,13 +59,13 @@ jobs:
           cache: true
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
-          node-version: 22.19.0
+          node-version: 22.23.4
           cache: "yarn"
 
       - name: Download node_modules
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: node-modules
           path: node_modules/
@@ -88,7 +88,7 @@ jobs:
           NODE_ENV: production
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-files
           path: build/
@@ -104,10 +104,10 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      packages: write
+      id-token: write # npm trusted publishing (OIDC); NPM_TOKEN stays as fallback
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
@@ -120,13 +120,13 @@ jobs:
           cache: true
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
-          node-version: 22.19.0
+          node-version: 22.23.4
           cache: "yarn"
 
       - name: Download node_modules
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: node-modules
           path: node_modules/

@@ -1,4 +1,4 @@
-# Depandabot configuration for Yarn
+# Dependabot configuration for Yarn and GitHub Actions
 
 version: 2
 
@@ -6,10 +6,27 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
     labels:
       - "dependencies"
     open-pull-requests-limit: 10
     commit-message:
       prefix: chore
       prefix-development: chore
+    groups:
+      # One PR per week for all non-major bumps; majors still get their own PR
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: ci
