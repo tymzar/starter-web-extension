@@ -1,3 +1,23 @@
+# [2.0.0](https://github.com/tymzar/starter-web-extension/compare/v1.1.0...v2.0.0) (2026-10-28)
+
+
+### Bug Fixes
+
+* **cli:** use npm's canonical bin and repository fields ([5364087](https://github.com/tymzar/starter-web-extension/commit/5364087939acdd734929afcac993f501a4e298be))
+
+
+### Documentation
+
+* add upgrade notes for 2.0.0 ([a4e60b0](https://github.com/tymzar/starter-web-extension/commit/a4e60b09b9b0a72c2c54b4a5b8022d9244979ae0))
+
+
+### BREAKING CHANGES
+
+* the template now targets React 19, HeroUI v3 and
+Tailwind CSS v4 (no tailwind.config.js, no HeroUIProvider), and requires
+Node >= 22.13.0 and Chrome 111+. Projects generated from 1.x need the
+changes described in the README's "Upgrading from 1.x" section.
+
 # [1.1.0](https://github.com/tymzar/starter-web-extension/compare/v1.0.1...v1.1.0) (2026-10-28)
 
 
