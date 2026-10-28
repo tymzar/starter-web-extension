@@ -12,19 +12,19 @@ yarn create starter-web-extension
 
 ## Tech stack
 
-- React **18**
+- React **19**
 - React `useReducer` (reducer-based state management)
 - Google Chrome Extension Manifest **v3**
-- HeroUI
+- HeroUI **v3**
 - Esbuild
 - TypeScript
-- Tailwind CSS (via PostCSS)
+- Tailwind CSS **v4** (via `@tailwindcss/postcss`)
 
 ## Pre-requisites and running
 
 ### Pre-requisites
 
-1. Use Node > **22.7.0**.
+1. Use Node > **22.7.0** and Chrome **111+** (required by Tailwind CSS v4).
 2. Clone/Download this repository.
 3. Replace package's `name`, `description` and `repository` fields in `package.json`.
 4. Replace the name of extension in `src/manifest.json`.

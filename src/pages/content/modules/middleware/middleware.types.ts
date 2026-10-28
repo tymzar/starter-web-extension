@@ -119,3 +119,9 @@ export type MiddlewareActions =
   | RemoveColorBoxAction
   | ClearColorBoxesAction
   | SetResponseAction;
+
+// Shape of what the extension keeps in chrome.storage.sync
+export type StorageItems = {
+  maxLength?: string; // saved from the options form, so stored as a string
+  elements?: Array<string>;
+};

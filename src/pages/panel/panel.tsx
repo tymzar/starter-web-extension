@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from "react";
 // import type { PostColorsMessage } from '../content/modules/middleware/middleware.types';
 // import { MESSAGE_TYPES } from '../content/modules/middleware/middleware.types';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Chip,
-} from "@heroui/react";
+import { Button, Card, Chip, Separator } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import type { StorageItems } from "../content/modules/middleware/middleware.types";
 
-export function Panel(): JSX.Element {
+export function Panel(): React.JSX.Element {
   const [elementsLimit, setElementsLimit] = useState(1);
   const [elements, setElements] = useState<Array<string>>([]);
 
   useEffect(() => {
-    chrome.storage.sync.get(["maxLength", "elements"], function (result) {
-      setElementsLimit(result.maxLength ?? 1);
-      setElements(result.elements ?? []);
-    });
+    chrome.storage.sync.get<StorageItems>(
+      ["maxLength", "elements"],
+      function (result) {
+        setElementsLimit(Number(result.maxLength ?? 1));
+        setElements(result.elements ?? []);
+      }
+    );
 
     // Listen for storage changes
     const handleStorageChange = (changes: {
@@ -30,7 +27,9 @@ export function Panel(): JSX.Element {
       // Handle elements changes
       if (changes.elements) {
         console.log("Panel: Elements changed to:", changes.elements.newValue);
-        setElements(changes.elements.newValue ?? []);
+        setElements(
+          (changes.elements.newValue as StorageItems["elements"]) ?? []
+        );
       }
 
       // Handle maxLength changes
@@ -39,7 +38,9 @@ export function Panel(): JSX.Element {
           "Panel: Max length changed to:",
           changes.maxLength.newValue
         );
-        setElementsLimit(changes.maxLength.newValue ?? 1);
+        setElementsLimit(
+          Number((changes.maxLength.newValue as StorageItems["maxLength"]) ?? 1)
+        );
       }
     };
 
@@ -68,7 +69,7 @@ export function Panel(): JSX.Element {
   };
 
   const refreshElements = () => {
-    chrome.storage.sync.get(["elements"], function (result) {
+    chrome.storage.sync.get<StorageItems>(["elements"], function (result) {
       setElements(result.elements ?? []);
     });
   };
@@ -89,7 +90,7 @@ export function Panel(): JSX.Element {
         Extension Panel
       </h1>
       <Card className="w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-        <CardHeader className="flex justify-between items-center">
+        <Card.Header className="flex flex-row justify-between items-center">
           <div className="flex items-center gap-2">
             <Icon
               icon="mdi:dev-to"
@@ -100,9 +101,8 @@ export function Panel(): JSX.Element {
             </h3>
           </div>
           <Button
+            variant="ghost"
             isIconOnly
-            color="primary"
-            variant="light"
             aria-label="Settings"
             onPress={() => {
               chrome.runtime.openOptionsPage();
@@ -110,11 +110,11 @@ export function Panel(): JSX.Element {
           >
             <Icon icon="mdi:cog" className="text-lg" />
           </Button>
-        </CardHeader>
+        </Card.Header>
 
-        <Divider className="bg-gray-200 dark:bg-gray-700" />
+        <Separator className="bg-gray-200 dark:bg-gray-700" />
 
-        <CardBody>
+        <Card.Content>
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
               <Icon
@@ -152,7 +152,7 @@ export function Panel(): JSX.Element {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {elements.map((element, index) => (
-                    <Chip key={index} variant="flat" color="primary" size="sm">
+                    <Chip key={index} variant="soft" color="accent" size="sm">
                       {element}
                     </Chip>
                   ))}
@@ -176,35 +176,24 @@ export function Panel(): JSX.Element {
 
             <div className="flex gap-2">
               <Button
-                color="primary"
-                variant="flat"
+                variant="secondary"
                 size="sm"
                 onPress={addElement}
                 isDisabled={elements.length >= elementsLimit}
               >
                 Add Element
               </Button>
-              <Button
-                color="secondary"
-                variant="flat"
-                size="sm"
-                onPress={refreshElements}
-              >
+              <Button variant="tertiary" size="sm" onPress={refreshElements}>
                 Refresh
               </Button>
               {elements.length > 0 && (
-                <Button
-                  color="danger"
-                  variant="flat"
-                  size="sm"
-                  onPress={clearElements}
-                >
+                <Button variant="danger-soft" size="sm" onPress={clearElements}>
                   Clear All
                 </Button>
               )}
             </div>
           </div>
-        </CardBody>
+        </Card.Content>
       </Card>
     </div>
   );
