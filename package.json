@@ -56,10 +56,10 @@
     ".github/workflows/package-extension.yml"
   ],
   "dependencies": {
-    "@heroui/react": "3.2.6",
-    "@heroui/styles": "3.2.6",
+    "@heroui/react": "3.2.7",
+    "@heroui/styles": "3.2.7",
     "@iconify/react": "6.0.3",
-    "@inquirer/prompts": "8.7.4",
+    "@inquirer/prompts": "8.7.5",
     "@internationalized/date": "3.12.4",
     "@react-aria/ssr": "3.10.1",
     "@react-aria/utils": "3.34.1",
@@ -79,7 +79,7 @@
     "@semantic-release/npm": "13.2.0",
     "@semantic-release/release-notes-generator": "14.1.1",
     "@tailwindcss/postcss": "4.3.3",
-    "@types/chrome": "0.3.6",
+    "@types/chrome": "0.3.7",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
